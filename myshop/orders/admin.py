@@ -5,6 +5,9 @@ import csv
 import datetime
 from django.http import HttpResponse
 
+from django.urls import reverse
+from django.utils.safestring import mark_safe
+
 
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
@@ -13,7 +16,7 @@ class OrderItemInline(admin.TabularInline):
 
 def export_to_csv(modeladmin, request, queryset):
     opts = modeladmin.model._meta
-    content_disposition = "attachment; filename={opts.verbose_name}.csv"
+    content_disposition = f'attachment; filename={opts.verbose_name}.csv'
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = content_disposition
     writer = csv.writer(response)
@@ -34,10 +37,21 @@ def export_to_csv(modeladmin, request, queryset):
 export_to_csv.short_description = 'Export to CSV'
 
 
+def order_detail(obj):
+    url = reverse('orders:admin_order_detail', args=[obj.id])
+    return mark_safe(f'<a href="{url}">View</a>')
+
+
+def order_pdf(obj):
+    url = reverse('orders:admin_order_pdf', args=[obj.id])
+    return mark_safe(f'<a href="{url}">PDF</a>')
+order_pdf.short_description = 'Invoice'
+
+
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['id', 'first_name', 'last_name', 'email', 'address', 'postal_code',
-                    'city', 'paid', 'created', 'updated']
+                    'city', 'paid', 'created', 'updated', order_detail, order_pdf]
     list_filter = ['paid', 'created', 'updated']
     inlines = [OrderItemInline]
     actions = [export_to_csv]

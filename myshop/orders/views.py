@@ -4,6 +4,24 @@ from .models import OrderItem
 from .forms import OrderCreateForm
 from cart.cart import Cart
 
+from django.contrib.admin.views.decorators import staff_member_required
+from django.shortcuts import get_object_or_404
+from .models import Order
+
+from django.conf import settings
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+# import weasyprint
+import io
+from django.http import FileResponse
+from reportlab.pdfgen import canvas
+
+from io import BytesIO
+from django.http import HttpResponse
+from django.template.loader import get_template
+
+from xhtml2pdf import pisa
+
 
 def order_create(request):
     cart = Cart(request)
@@ -24,3 +42,38 @@ def order_create(request):
         form = OrderCreateForm()
 
     return render(request, 'orders/order/create.html', {'cart': cart, 'form': form})
+
+
+@staff_member_required
+def admin_order_detail(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    return render(request, 'admin/orders/order/detail.html', {'order': order})
+
+
+@staff_member_required
+def admin_order_pdf(request, order_id):
+    # order = get_object_or_404(Order, id=order_id)
+    # html = render_to_string('orders/order/pdf.html', {'order': order})
+    # response = HttpResponse(content_type='application/pdf')
+    # response['Content-Disposition'] = f'filename=order_{order.id}.pdf'
+    # weasyprint.HTML(string=html).write_pdf(response, stylesheets=[weasyprint.CSS(settings.STATIC_ROOT + 'css/pdf.css')])
+        # buffer = io.BytesIO()
+        # p = canvas.Canvas(buffer)
+        # p.drawString('orders/order/pdf.html', {'order': order})
+        # p.showPage()
+        # p.save()
+        # pdf = buffer.getvalue()
+        # buffer.close()
+        # response.write(pdf)
+    # return response
+    order = get_object_or_404(Order, id=order_id)
+    # template = get_template('orders/order/pdf.html')
+    # html = template.render({'order': order})
+    html = render_to_string('orders/order/pdf.html', {'order': order})
+    result = BytesIO()
+    pdf = pisa.pisaDocument(BytesIO(html.encode()), result)
+    if not pdf.err:
+        response = HttpResponse(result.getvalue(), content_type='application/pdf')
+        response['Content-Disposition'] = f'filename=order_{order.id}.pdf'
+        return response
+    return None
