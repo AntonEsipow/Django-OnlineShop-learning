@@ -24,7 +24,7 @@ tbody tr:nth-child(odd) {
 
 thead th, tbody tr.total {
     background:#5993bb;
-    color:#fff;
+    color: black;
     font-weight:bold;
 }
 
