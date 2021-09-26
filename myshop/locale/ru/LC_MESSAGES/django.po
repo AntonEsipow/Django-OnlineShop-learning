@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-25 21:48+0300\n"
-"PO-Revision-Date: 2021-09-25 22:22+0000\n"
+"POT-Creation-Date: 2021-09-26 12:37+0300\n"
+"PO-Revision-Date: 2021-09-26 12:40+0000\n"
 "Last-Translator:   <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -81,13 +81,47 @@ msgstr "Оформить"
 msgid "Coupon"
 msgstr "Купон"
 
-#: .\myshop\settings.py:119
+#: .\myshop\settings.py:120
 msgid "English"
 msgstr "Английский"
 
-#: .\myshop\settings.py:120
+#: .\myshop\settings.py:121
 msgid "Russian"
 msgstr "Русский"
+
+#: .\myshop\urls.py:26
+msgid "admin/"
+msgstr "админ"
+
+#: .\myshop\urls.py:27
+msgid "orders/"
+msgstr "заказы"
+
+#: .\myshop\urls.py:28
+#, fuzzy
+#| msgid "Coupon"
+msgid "coupons/"
+msgstr "Купон"
+
+#: .\myshop\urls.py:29
+msgid "payment/"
+msgstr "оплата"
+
+#: .\myshop\urls.py:30
+msgid "cart/"
+msgstr "корзина"
+
+#: .\payment\urls.py:9
+msgid "process/"
+msgstr "обработка"
+
+#: .\payment\urls.py:10
+msgid "done/"
+msgstr "выполнено"
+
+#: .\payment\urls.py:11
+msgid "canceled/"
+msgstr "отменен"
 
 #: .\shop\templates\shop\base.html:7 .\shop\templates\shop\base.html:13
 msgid "My shop"
